@@ -27,7 +27,7 @@ workflows:
           
           # Ajouter la suppression de la vérification de compatibilité Kotlin pour Compose
           echo "
-          # Ajout pour résoudre l'incompatibilité Kotlin/Compose
+          // Ajout pour résoudre l'incompatibilité Kotlin/Compose
           allprojects {
               tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
                   kotlinOptions {
@@ -96,7 +96,7 @@ workflows:
           
           # Ajouter la suppression de la vérification de compatibilité Kotlin pour Compose
           echo "
-          # Ajout pour résoudre l'incompatibilité Kotlin/Compose
+          // Ajout pour résoudre l'incompatibilité Kotlin/Compose
           allprojects {
               tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
                   kotlinOptions {
