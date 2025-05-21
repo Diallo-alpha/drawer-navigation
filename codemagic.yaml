@@ -13,6 +13,13 @@ workflows:
       - name: Install npm dependencies
         script: | 
           npm install
+      - name: Update compileSdk to 34
+        script: |
+          # Mettre à jour le compileSdk dans build.gradle
+          cd android
+          sed -i '' 's/compileSdk .*/compileSdk 34/g' app/build.gradle
+          # Vous pourriez aussi avoir besoin de mettre à jour targetSdk
+          # sed -i '' 's/targetSdk .*/targetSdk 34/g' app/build.gradle
       - name: Build Android release APK
         script: | 
           cd android
@@ -54,6 +61,13 @@ workflows:
       - name: Set Android SDK location
         script: | 
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Update compileSdk to 34
+        script: |
+          # Mettre à jour le compileSdk dans build.gradle
+          cd android
+          sed -i '' 's/compileSdk .*/compileSdk 34/g' app/build.gradle
+          # Vous pourriez aussi avoir besoin de mettre à jour targetSdk
+          # sed -i '' 's/targetSdk .*/targetSdk 34/g' app/build.gradle
       - name: Build Android APK
         script: | 
           cd android
@@ -67,10 +81,3 @@ workflows:
         notify:
           success: true
           failure: true
-
-secrets:
-  keystore_reference:
-    keystore: Encrypted(keystore file contenu de `keystore.txt` via CM_KEYSTORE)
-    keystore_password: Encrypted($CM_KEYSTORE_PASSWORD)
-    key_alias: Encrypted($CM_KEY_ALIAS)
-    key_password: Encrypted($CM_KEY_PASSWORD)
