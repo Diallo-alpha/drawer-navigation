@@ -1,0 +1,72 @@
+workflows:
+  react-native-android:
+    name: React Native Android
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      android_signing:
+        - keystore_reference
+      vars:
+        PACKAGE_NAME: "com.senmarket.app"
+    scripts:
+      - name: Set Android SDK location
+        script: | 
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Install npm dependencies
+        script: | 
+          npm install
+      - name: Build Android release APK
+        script: | 
+          cd android
+          ./gradlew assembleRelease
+    artifacts:
+      - android/app/build/outputs/apk/release/*.apk
+    publishing:
+      email:
+        recipients:
+          - alphaloppecity@gmail.com
+        notify:
+          success: true
+          failure: true
+      scripts:
+        - name: Deploy to Firebase App Distribution
+          script: |
+            echo "Vous pouvez ajouter des commandes de déploiement ici"
+
+  # Configuration pour une version Expo si nécessaire
+  expo-android:
+    name: Expo Android Build
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      vars:
+        PACKAGE_NAME: "com.senmarket.app"
+    scripts:
+      - name: Install npm dependencies
+        script: | 
+          npm install
+      - name: Install EAS CLI
+        script: |
+          npm install -g eas-cli
+      - name: Configure EAS
+        script: |
+          npx eas-cli build:configure
+      - name: Run Expo Prebuild
+        script: | 
+          npx expo prebuild
+      - name: Set Android SDK location
+        script: | 
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Build Android APK
+        script: | 
+          cd android
+          ./gradlew assembleRelease
+    artifacts:
+      - android/app/build/outputs/apk/release/*.apk
+    publishing:
+      email:
+        recipients:
+          - alphaloppecity@gmail.com
+        notify:
+          success: true
+          failure: true
