@@ -13,7 +13,7 @@ workflows:
       - name: Install npm dependencies
         script: | 
           npm install
-      - name: Update Android SDK versions
+      - name: Update Android config
         script: |
           cd android
           # Mettre à jour compileSdk à 34
@@ -25,8 +25,26 @@ workflows:
           # Mettre à jour targetSdk à 34 pour correspondre à compileSdk
           sed -i '' 's/targetSdk .*/targetSdk 34/g' app/build.gradle
           
-          # Vérifier le fichier modifié
+          # Ajouter la suppression de la vérification de compatibilité Kotlin pour Compose
+          echo "
+          # Ajout pour résoudre l'incompatibilité Kotlin/Compose
+          allprojects {
+              tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                  kotlinOptions {
+                      freeCompilerArgs += [
+                          \"-P\",
+                          \"plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true\"
+                      ]
+                  }
+              }
+          }
+          " >> build.gradle
+          
+          # Vérifier les fichiers modifiés
+          echo "--- app/build.gradle ---"
           cat app/build.gradle
+          echo "--- build.gradle ---"
+          cat build.gradle
       - name: Build Android release APK
         script: | 
           cd android
@@ -40,10 +58,6 @@ workflows:
         notify:
           success: true
           failure: true
-      scripts:
-        - name: Deploy to Firebase App Distribution
-          script: |
-            echo "Vous pouvez ajouter des commandes de déploiement ici"
 
   expo-android:
     name: Expo Android Build
@@ -68,7 +82,7 @@ workflows:
       - name: Set Android SDK location
         script: | 
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
-      - name: Update Android SDK versions
+      - name: Update Android config
         script: |
           cd android
           # Mettre à jour compileSdk à 34
@@ -80,8 +94,26 @@ workflows:
           # Mettre à jour targetSdk à 34 pour correspondre à compileSdk
           sed -i '' 's/targetSdk .*/targetSdk 34/g' app/build.gradle
           
-          # Vérifier le fichier modifié
+          # Ajouter la suppression de la vérification de compatibilité Kotlin pour Compose
+          echo "
+          # Ajout pour résoudre l'incompatibilité Kotlin/Compose
+          allprojects {
+              tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                  kotlinOptions {
+                      freeCompilerArgs += [
+                          \"-P\",
+                          \"plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true\"
+                      ]
+                  }
+              }
+          }
+          " >> build.gradle
+          
+          # Vérifier les fichiers modifiés
+          echo "--- app/build.gradle ---"
           cat app/build.gradle
+          echo "--- build.gradle ---"
+          cat build.gradle
       - name: Build Android APK
         script: | 
           cd android
