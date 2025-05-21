@@ -33,7 +33,6 @@ workflows:
           script: |
             echo "Vous pouvez ajouter des commandes de déploiement ici"
 
-  # Configuration pour une version Expo si nécessaire
   expo-android:
     name: Expo Android Build
     max_build_duration: 120
@@ -70,3 +69,10 @@ workflows:
         notify:
           success: true
           failure: true
+
+secrets:
+  keystore_reference:
+    keystore: Encrypted(keystore file contenu de `keystore.txt` via CM_KEYSTORE)
+    keystore_password: Encrypted($CM_KEYSTORE_PASSWORD)
+    key_alias: Encrypted($CM_KEY_ALIAS)
+    key_password: Encrypted($CM_KEY_PASSWORD)
