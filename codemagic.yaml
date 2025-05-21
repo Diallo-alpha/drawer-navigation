@@ -13,13 +13,20 @@ workflows:
       - name: Install npm dependencies
         script: | 
           npm install
-      - name: Update compileSdk to 34
+      - name: Update Android SDK versions
         script: |
-          # Mettre à jour le compileSdk dans build.gradle
           cd android
+          # Mettre à jour compileSdk à 34
           sed -i '' 's/compileSdk .*/compileSdk 34/g' app/build.gradle
-          # Vous pourriez aussi avoir besoin de mettre à jour targetSdk
-          # sed -i '' 's/targetSdk .*/targetSdk 34/g' app/build.gradle
+          
+          # Mettre à jour minSdkVersion à 24 (nécessaire pour React Native 0.76.9)
+          sed -i '' 's/minSdkVersion .*/minSdkVersion 24/g' app/build.gradle
+          
+          # Mettre à jour targetSdk à 34 pour correspondre à compileSdk
+          sed -i '' 's/targetSdk .*/targetSdk 34/g' app/build.gradle
+          
+          # Vérifier le fichier modifié
+          cat app/build.gradle
       - name: Build Android release APK
         script: | 
           cd android
@@ -61,13 +68,20 @@ workflows:
       - name: Set Android SDK location
         script: | 
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
-      - name: Update compileSdk to 34
+      - name: Update Android SDK versions
         script: |
-          # Mettre à jour le compileSdk dans build.gradle
           cd android
+          # Mettre à jour compileSdk à 34
           sed -i '' 's/compileSdk .*/compileSdk 34/g' app/build.gradle
-          # Vous pourriez aussi avoir besoin de mettre à jour targetSdk
-          # sed -i '' 's/targetSdk .*/targetSdk 34/g' app/build.gradle
+          
+          # Mettre à jour minSdkVersion à 24 (nécessaire pour React Native 0.76.9)
+          sed -i '' 's/minSdkVersion .*/minSdkVersion 24/g' app/build.gradle
+          
+          # Mettre à jour targetSdk à 34 pour correspondre à compileSdk
+          sed -i '' 's/targetSdk .*/targetSdk 34/g' app/build.gradle
+          
+          # Vérifier le fichier modifié
+          cat app/build.gradle
       - name: Build Android APK
         script: | 
           cd android
